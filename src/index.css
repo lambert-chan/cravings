@@ -1,0 +1,80 @@
+:root {
+  /* Color Pallette */
+  --rosewood: #5e0b15;
+  --red-violet-color-wheel: #90323d;
+  --bone: #d9cab3;
+  --bronze: #bc8034;
+  --shadow: #8c7a6b;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto';
+  background-color: var(--shadow);
+  color: white;
+}
+
+a:visited {
+  color: inherit
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: transparent;
+  color: white;
+}
+
+#home-button {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+#home-button h1 {
+  padding: 0 1rem;
+}
+
+.header ul {
+  list-style-type: none;
+  display: flex;
+}
+
+.header li {
+  padding-right: 1rem;
+}
+
+.header a {
+  text-decoration: none;
+}
+
+/** PERSONALPAGE **/
+.autocomplete-container {
+  color: black;
+}
+
+/** LOGINPAGE **/
+.login-container {
+  padding: 8rem 0;
+  height: 100%;
+}
+
+.paper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  color: black;
+  padding: 2rem;
+}
+
+.avatar {
+  color: var(--red-violet-color-wheel);
+  border-radius: 1em;
+}
+
+.form {
+  margin-top: 1rem;
+}
