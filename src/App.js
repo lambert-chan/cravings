@@ -10,6 +10,8 @@ import HomeIcon from '@material-ui/icons/Home'
 import LoginPage from './pages/loginpage'
 import HomePage from './pages/home'
 import PersonalPage from './pages/personal'
+import AdminPage from './pages/adminpage'
+import ExplorePage from './pages/explore'
 
 function App() {
   return (
@@ -27,41 +29,34 @@ function App() {
             <li>
               <Link to="/personal">Personal</Link>
             </li>
+            <li>
+              <Link to="/explore">Explore</Link>
+            </li>
+            <li>
+              <Link to="/admin">Admin</Link>
+            </li>
           </ul>
         </div>
 
-
         <Switch>
           <Route exact path="/">
-            <Home />
+            <HomePage />
           </Route>
           <Route path="/login">
-            <Login />
+            <LoginPage />
           </Route>
           <Route path="/personal">
-            <CreatePage />
+            <PersonalPage />
+          </Route>
+          <Route path="/explore">
+            <ExplorePage />
+          </Route>
+          <Route path="/admin">
+            <AdminPage />
           </Route>
         </Switch>
       </div>
     </Router>
-  );
-}
-
-function Home() {
-  return (
-    <HomePage />
-  );
-}
-
-function Login() {
-  return (
-    <LoginPage />
-  );
-}
-
-function CreatePage() {
-  return (
-    <PersonalPage/>
   );
 }
 
