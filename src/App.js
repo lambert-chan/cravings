@@ -8,8 +8,10 @@ import {
 } from "react-router-dom";
 import HomeIcon from '@material-ui/icons/Home'
 import LoginPage from './pages/loginpage'
+import RegisterPage from './pages/register'
 import HomePage from './pages/home'
 import PersonalPage from './pages/personal'
+import AdminPage from './pages/admin'
 
 function App() {
   return (
@@ -25,7 +27,13 @@ function App() {
               <Link to="/login">Login</Link>
             </li>
             <li>
+              <Link to="/register">Register</Link>
+            </li>
+            <li>
               <Link to="/personal">Personal</Link>
+            </li>
+            <li>
+              <Link to="/admin">Admin</Link>
             </li>
           </ul>
         </div>
@@ -40,6 +48,12 @@ function App() {
           </Route>
           <Route path="/personal">
             <CreatePage />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path='/admin'>
+            <AdminPage />
           </Route>
         </Switch>
       </div>
@@ -62,6 +76,12 @@ function Login() {
 function CreatePage() {
   return (
     <PersonalPage/>
+  );
+}
+
+function Register() {
+  return(
+    <RegisterPage/>
   );
 }
 

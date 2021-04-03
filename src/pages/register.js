@@ -1,19 +1,17 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 
 
 
-
-export default class LoginPage extends React.Component {
+export default class RegisterPage extends React.Component {
+    
     constructor(props) {
         super(props);
 
-        this.state = { email:'', password:'' };
+        this.state = { name: '', email:'', password:'' };
     }
 
     handleChange = (event) => {
@@ -21,9 +19,9 @@ export default class LoginPage extends React.Component {
       }
 
     handleSubmit = (event) => {
-        var formBody = "email=" + this.state.email + "&password=" 
+        var formBody = "name=" + this.state.name + "&email=" + this.state.email + "&password=" 
         + this.state.password;
-          fetch('http://vladkubl.mywhc.ca/users/API/v1/users/login', {
+          fetch('http://vladkubl.mywhc.ca/users/API/v1/users/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -33,25 +31,42 @@ export default class LoginPage extends React.Component {
             return response.json()
           }).then(function(json) {
               console.log(json);
-              localStorage.setItem("uid", json.id);
-              localStorage.setItem("is_admin", json.is_admin.data)
-
+            if (json.response == "Email present") {
+                window.alert("Sorry that email is already in use!")
+                return;
+            }
+            else {
+                window.alert("User added successfully");
+                return;
+            }
           })
           event.preventDefault();
     }
 
-
     render() {
-        const {email, password} = this.state;
+        const {name, email, password} = this.state;
         return (
-            <Container component="main" maxWidth="xs" className="login-container">
-                <div className='paper'>
+            <Container component="main" maxWidth="xs" className="register-container">
+            <div className='paper'>
 
-                    <LockOutlinedIcon className='avatar' fontSize="large"/>
-                    <h2>Sign in</h2>
-                    <form className='form'
+                <LockOutlinedIcon className='avatar' fontSize="large"/>
+                <h2>Register</h2>
+                <form className='form'
                  onSubmit={this.handleSubmit}
                  noValidate>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="name"
+                        label="Name"
+                        name="name"
+                        autoComplete="name"
+                        value={name}
+                        onChange={this.handleChange}
+                        autoFocus
+                    />
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -78,17 +93,22 @@ export default class LoginPage extends React.Component {
                         onChange={this.handleChange}
                         autoComplete="current-password"
                     />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            className='submit'
-                        >
-                            Sign In
-            </Button>
-                    </form>
-                </div>
-            </Container>
-        );
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        className='submit'
+                    >
+                        Register
+          </Button>
+                </form>
+            </div>
+        </Container>
+    );
+        
+        
     }
+
 }
+
+// App.propTypes = { action: React.PropTypes.string.isRequired, method: React.PropTypes.string}
