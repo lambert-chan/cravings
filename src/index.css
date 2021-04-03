@@ -54,7 +54,13 @@ a:visited {
   text-decoration: none;
 }
 
+#home-button img {
+  width: 50px;
+  height: 50px;
+}
+
 #home-button h1 {
+  font-size: 32px;
   padding: 0 1rem;
 }
 
@@ -65,10 +71,28 @@ a:visited {
 
 .header li {
   padding-right: 1rem;
+  font-size: 18px;
 }
 
-.header a {
+a {
   text-decoration: none;
+}
+
+#cravings-mobile-menu {
+  display: none;
+}
+
+#cravings-menu div{
+  display: flex;
+}
+
+/** Landing Page **/
+.description h1 {
+  font-size: 60px;
+}
+
+.description p {
+  font-size: 18px;
 }
 
 /** PERSONALPAGE **/
@@ -109,10 +133,34 @@ a:visited {
   color: white !important;
 }
 
+/** ADMIN PAGE **/
+
+#admin-requests-container {
+  display: flex;
+}
+
+#admin-requests-container div:first-child{
+  margin: auto;
+}
+
+/** Others **/
+#waiting-cat {
+  margin: auto;
+}
+
+#swaggerContainer {
+  background-color: white;
+  padding: 2em 0;
+}
+
 /** MEDIA QUERY **/
 
 @media screen and (max-width: 500px) {
   .main {
     flex-direction: column;
+  }
+
+  .main img {
+    margin: 10vh 0;
   }
 }

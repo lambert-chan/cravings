@@ -6,7 +6,7 @@ import ListAlt from '@material-ui/icons/ListAlt'
 import Container from '@material-ui/core/Container';
 import moment from 'moment'
 
-function LoginPage() {
+function LoginPage({ callBack}) {
     const initialData = {
         name: '',
         email: '',
@@ -28,6 +28,9 @@ function LoginPage() {
         console.log(formData);
         var submission_time = moment(e?.timestamp);
         console.log(submission_time)
+        if (callBack) {
+            callBack()
+        }
     }
 
     return (
@@ -38,17 +41,6 @@ function LoginPage() {
                         <LockOutlinedIcon className='avatar' fontSize="large" />
                         <h2>Sign in</h2>
                         <form className='form' noValidate onSubmit={handleSubmit}>
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="name"
-                                label="Username"
-                                name="name"
-                                autoFocus
-                                onChange={handleChange}
-                            />
                             <TextField
                                 variant="outlined"
                                 margin="normal"

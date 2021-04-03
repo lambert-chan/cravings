@@ -1,24 +1,29 @@
-import React, {useState, useEffect} from 'react'
-import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
-import {useTable} from 'react-table'
-import {columns} from '../components/columns'
+import React, { useState, useEffect } from 'react'
 import RequestTable from '../components/RequestTable'
+import axios from 'axios';
+import { ENDPOINT } from '../constants/api'
+import { WaitingCat } from '../components/Loading'
 
-export default function AdminPage() {
+function AdminPage() {
     const [data, setData] = useState([]);
-    const [q, setQ] = useState("");
+    // const [q, setQ] = useState("");
 
     useEffect(() => {
-        fetch("http://vladkubl.mywhc.ca/users/API/v1/requests")
-        .then((response) => response.json())
-        .then((json) => setData(json));
+        axios.get(`${ENDPOINT}/requests`)
+            .then(res => {
+                setData(res.data)
+            })
     }, [])
 
     return (
-        <div>
-            <RequestTable data={data} />
+        <div id="admin-requests-container">
+            {
+                data.length ?
+                    <RequestTable data={data} />
+                    : <WaitingCat />
+            }
         </div>
     )
 }
 
+export default AdminPage;

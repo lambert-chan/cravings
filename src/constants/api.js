@@ -1,0 +1,1 @@
+export const ENDPOINT = "https://vladkubl.mywhc.ca/users/API/v1"
