@@ -21,9 +21,7 @@ class PersonalPage extends React.Component {
         const { location } = this.state;
         return (
             <Container component="main" className="main">
-                <Typography component="h1">
-                    Start with a location
-            </Typography>
+                <Typography component="h1">Start with a location</Typography>
                 <div className="autocomplete-container">
                     <GooglePlacesAutocomplete
                         apiKey="AIzaSyB4CuJ2RQrWSSPPA-9w7eZlAUgai2PmZIQ"

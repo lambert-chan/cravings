@@ -8,10 +8,10 @@ import {
 } from "react-router-dom";
 import HomeIcon from '@material-ui/icons/Home'
 import LoginPage from './pages/loginpage'
-import RegisterPage from './pages/register'
 import HomePage from './pages/home'
 import PersonalPage from './pages/personal'
-import AdminPage from './pages/admin'
+import AdminPage from './pages/adminpage'
+import ExplorePage from './pages/explore'
 
 function App() {
   return (
@@ -27,10 +27,10 @@ function App() {
               <Link to="/login">Login</Link>
             </li>
             <li>
-              <Link to="/register">Register</Link>
+              <Link to="/personal">Personal</Link>
             </li>
             <li>
-              <Link to="/personal">Personal</Link>
+              <Link to="/explore">Explore</Link>
             </li>
             <li>
               <Link to="/admin">Admin</Link>
@@ -38,50 +38,25 @@ function App() {
           </ul>
         </div>
 
-
         <Switch>
           <Route exact path="/">
-            <Home />
+            <HomePage />
           </Route>
           <Route path="/login">
-            <Login />
+            <LoginPage />
           </Route>
           <Route path="/personal">
-            <CreatePage />
+            <PersonalPage />
           </Route>
-          <Route path="/register">
-            <Register />
+          <Route path="/explore">
+            <ExplorePage />
           </Route>
-          <Route path='/admin'>
+          <Route path="/admin">
             <AdminPage />
           </Route>
         </Switch>
       </div>
     </Router>
-  );
-}
-
-function Home() {
-  return (
-    <HomePage />
-  );
-}
-
-function Login() {
-  return (
-    <LoginPage />
-  );
-}
-
-function CreatePage() {
-  return (
-    <PersonalPage/>
-  );
-}
-
-function Register() {
-  return(
-    <RegisterPage/>
   );
 }
 

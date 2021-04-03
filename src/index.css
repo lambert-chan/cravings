@@ -5,6 +5,7 @@
   --bone: #d9cab3;
   --bronze: #bc8034;
   --shadow: #8c7a6b;
+  --button: #1183ca;
 }
 
 body {
@@ -12,6 +13,26 @@ body {
   font-family: 'Roboto';
   background-color: var(--shadow);
   color: white;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+}
+
+.main img {
+  height: auto;
+  width: auto;
+}
+
+.main .description {
+  align-self: center;
+}
+
+a {
+  color: inherit
 }
 
 a:visited {
@@ -77,4 +98,21 @@ a:visited {
 
 .form {
   margin-top: 1rem;
+}
+
+.submit {
+  background-color: var(--bone) !important;
+}
+
+.register {
+  background-color: var(--bronze) !important;
+  color: white !important;
+}
+
+/** MEDIA QUERY **/
+
+@media screen and (max-width: 500px) {
+  .main {
+    flex-direction: column;
+  }
 }

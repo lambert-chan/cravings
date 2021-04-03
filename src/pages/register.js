@@ -21,7 +21,7 @@ export default class RegisterPage extends React.Component {
     handleSubmit = (event) => {
         var formBody = "name=" + this.state.name + "&email=" + this.state.email + "&password=" 
         + this.state.password;
-          fetch('http://vladkubl.mywhc.ca/users/API/v1/users/register', {
+          fetch('https://vladkubl.mywhc.ca/users/API/v1/users/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
