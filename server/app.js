@@ -57,7 +57,15 @@ http.createServer((req, res) => {
                     res.end(JSON.stringify({response:"User not found!"}));
                 }
                 else {
-                    res.end(JSON.stringify({id:result[0]["id"], is_admin:result[0]["is_admin"]}));
+                    bcrypt.compare(user.password, result[0]['password']).then(function(results) {
+                            if (results) {
+                                res.end(JSON.stringify({id:result[0]["id"], is_admin:result[0]["is_admin"]}));
+                            }
+                            else {
+                                res.end(JSON.stringify({response:"Passwords do not match!"}));
+                            }
+                        });
+                    
                 }
                 })
             })
@@ -97,7 +105,7 @@ http.createServer((req, res) => {
                   "');",
                 function (err, result, fields) {
                   if (err) throw err;
-                  res.end(JSON.stringify(result));
+                  res.end(JSON.stringify({response:"Registered"}));
                 }
               );
               });
