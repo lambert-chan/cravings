@@ -5,12 +5,15 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import ListAlt from '@material-ui/icons/ListAlt'
 import Container from '@material-ui/core/Container';
 import moment from 'moment'
+import axios from 'axios'
 
 function LoginPage({ callBack}) {
     const initialData = {
         name: '',
         email: '',
         password: '',
+        registerEmail: '',
+        registerPassword: '',
         isAdmin: false,
     }
     const [hasAccount, setHasAccount] = useState(true);
@@ -23,15 +26,64 @@ function LoginPage({ callBack}) {
         })
     }
 
+    
+
+
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(formData);
+        
         var submission_time = moment(e?.timestamp);
-        console.log(submission_time)
-        if (callBack) {
-            callBack()
-        }
+        console.log(submission_time);
+        var formBody = "email=" + formData.email + "&password=" 
+        + formData.password;
+          fetch('http://vladkubl.mywhc.ca/users/API/v1/users/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: formBody 
+        }).then(function(response) {
+            return response.json()
+          }).then(function(json) {
+              console.log(json.response);
+              if (json.response == "User not found!" || json.response == "Passwords do not match!") {
+                window.alert("Login Failed! Either email or password are incorrect!")
+              }
+              else {
+                  if (callBack) {
+                      callBack();
+                  }
+              }
+
+          })   
     }
+
+    const handleRegister = e => {
+        e.preventDefault();
+        let formDataUrl = "name=" + formData.name + "&email=" + formData.registerEmail + "&password=" 
+            + formData.registerPassword;
+        fetch('https://vladkubl.mywhc.ca/users/API/v1/users/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formDataUrl
+        }).then(function(response) {
+            return response.json()
+        }).then(function(json) {
+            console.log(json.response)
+            if (json.response == "Email present") {
+                window.alert("Registration failed email already in use!")
+            }
+            if (json.response == "Registered") {
+               if (callBack) {
+                   callBack();
+               }
+            }
+        })
+        
+    }
+    
 
     return (
         <Container component="main" maxWidth="xs" className="login-container">
@@ -40,7 +92,7 @@ function LoginPage({ callBack}) {
                     <>
                         <LockOutlinedIcon className='avatar' fontSize="large" />
                         <h2>Sign in</h2>
-                        <form className='form' noValidate onSubmit={handleSubmit}>
+                        <form id='loginForm' className='form' noValidate onSubmit={handleSubmit}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -84,7 +136,9 @@ function LoginPage({ callBack}) {
                     <>
                         <ListAlt className='avatar' fontSize="large" />
                         <h2>Register</h2>
-                        <form className='form' noValidate>
+                        <form id ='registerForm' className='form' 
+                        onSubmit = {handleRegister}
+                        noValidate>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -101,10 +155,11 @@ function LoginPage({ callBack}) {
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="email"
+                                id="registerEmail"
                                 label="Email Address"
-                                name="email"
+                                name="registerEmail"
                                 autoComplete="email"
+                                onChange={handleChange}
                                 autoFocus
                             />
                             <TextField
@@ -112,11 +167,12 @@ function LoginPage({ callBack}) {
                                 margin="normal"
                                 required
                                 fullWidth
-                                name="password"
+                                name="registerPassword"
                                 label="Password"
                                 type="password"
-                                id="password"
+                                id="registerPassword"
                                 autoComplete="current-password"
+                                onChange={handleChange}
                             />
                             <Button
                                 type="submit"
