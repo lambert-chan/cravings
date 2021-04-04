@@ -58,7 +58,7 @@ function App() {
   const mobileMenu = () => {
     return (
       <>
-        <Button aria-controls="mobile-menu" aria-haspopup="true" onClick={handleClick}>
+        <Button aria-controls="mobile-menu" aria-haspopup="true" onClick={handleClick} style={{color:"white"}}>
           <MenuIcon />
         </Button>
         <Menu
@@ -69,17 +69,33 @@ function App() {
           onClose={handleClose}
         >
           <MenuItem>
-            <Link to="/login">Login</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to="/personal">Personal</Link>
-          </MenuItem>
-          <MenuItem>
             <Link to="/explore">Explore</Link>
           </MenuItem>
-          <MenuItem>
-            <Link to="/admin">Admin</Link>
-          </MenuItem>
+          {
+            isAuthenticated ?
+              <>
+                <MenuItem>
+                  <Link to="/personal">Personal</Link>
+                </MenuItem>
+
+                <MenuItem>
+                  <Link to="/api/v1">Api</Link>
+                </MenuItem>
+
+                <MenuItem>
+                  <Link to="/admin">Admin</Link>
+                </MenuItem>
+
+                <MenuItem>
+                  <Link to="/">Logout</Link>
+                </MenuItem>
+              </>
+              :
+              <MenuItem>
+                <Link to="/login">Login</Link>
+              </MenuItem>
+          }
+
         </Menu>
       </>
     )

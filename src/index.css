@@ -82,7 +82,7 @@ a {
   display: none;
 }
 
-#cravings-menu div{
+#cravings-menu div {
   display: flex;
 }
 
@@ -133,13 +133,39 @@ a {
   color: white !important;
 }
 
+/** Explore **/
+.lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.list-card {
+  width: fit-content;
+  min-width: 300px;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1em;
+}
+
+.list-card .MuiChip-root {
+  margin: 0.5em;
+}
+
+.list-card .MuiRating-root {
+  margin: auto;
+}
+
 /** ADMIN PAGE **/
 
 #admin-requests-container {
   display: flex;
 }
 
-#admin-requests-container div:first-child{
+#admin-requests-container div:first-child {
   margin: auto;
 }
 
@@ -162,5 +188,13 @@ a {
 
   .main img {
     margin: 10vh 0;
+  }
+
+  #cravings-mobile-menu {
+    display: flex;
+  }
+
+  #cravings-menu {
+    display: none;
   }
 }
