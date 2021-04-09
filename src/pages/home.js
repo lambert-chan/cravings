@@ -1,13 +1,13 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import person from '../img/person-thinking.png'
+import person from '../img/person-thinking-food.png'
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 class HomePage extends React.Component {
     render() {
         return (
-            <Container component="main">
+            <Container component="main" className="main-container">
                 <div className="main">
                     <div className="description">
                         <h1>What are you craving?</h1>

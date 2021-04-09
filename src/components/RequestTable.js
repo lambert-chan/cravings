@@ -24,7 +24,7 @@ function RequestTable({ data }) {
                     <TableHead>
                         <TableRow>
                             {
-                                keys.map(key => <TableCell key={key} align="center">{key.toUpperCase()}</TableCell>)
+                                keys.reverse().map(key => <TableCell key={key} align="center">{key.toUpperCase()}</TableCell>)
                             }
                         </TableRow>
                     </TableHead>

@@ -14,6 +14,7 @@ import PersonalPage from './pages/personal'
 import AdminPage from './pages/admin'
 import ExplorePage from './pages/explore'
 import Swagger from './pages/swagger'
+import SettingsPage from './pages/settings'
 import { Button, Menu, MenuItem } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu'
 
@@ -25,8 +26,28 @@ function App() {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [sessionToken, setSessionToken] = useState("123")
 
+  const adminMenu = [
+    {
+      name: 'Personal',
+      link: '/personal'
+    },
+    {
+      name: 'Api',
+      link: '/api/v1'
+    },
+    {
+      name: 'Admin',
+      link: '/admin'
+    },
+    {
+      name: 'Logout',
+      link: '/'
+    },
+  ]
+
   useEffect(() => {
     onLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function onLoad() {
@@ -58,7 +79,7 @@ function App() {
   const mobileMenu = () => {
     return (
       <>
-        <Button aria-controls="mobile-menu" aria-haspopup="true" onClick={handleClick} style={{color:"white"}}>
+        <Button aria-controls="mobile-menu" aria-haspopup="true" onClick={handleClick} style={{ color: "white" }}>
           <MenuIcon />
         </Button>
         <Menu
@@ -73,23 +94,13 @@ function App() {
           </MenuItem>
           {
             isAuthenticated ?
-              <>
-                <MenuItem>
-                  <Link to="/personal">Personal</Link>
-                </MenuItem>
-
-                <MenuItem>
-                  <Link to="/api/v1">Api</Link>
-                </MenuItem>
-
-                <MenuItem>
-                  <Link to="/admin">Admin</Link>
-                </MenuItem>
-
-                <MenuItem>
-                  <Link to="/">Logout</Link>
-                </MenuItem>
-              </>
+              adminMenu.map(
+                item => (
+                  <MenuItem key={item.name} onClick={item?.onClick}>
+                    <Link to={item.link}>{item.name}</Link>
+                  </MenuItem>
+                )
+              )
               :
               <MenuItem>
                 <Link to="/login">Login</Link>
@@ -120,6 +131,9 @@ function App() {
                 <Link to="/admin">Admin</Link>
               </li>
               <li>
+                <Link to="/settings">Settings</Link>
+              </li>
+              <li>
                 <Link to="/" onClick={logout}>Logout</Link>
               </li>
             </> :
@@ -133,13 +147,16 @@ function App() {
   }
 
   let login = () => {
+    console.log('callback login')
     userHasAuthenticated(true);
+    // setSessionToken('123');
     sessionStorage.setItem("isAuthenticated", "true")
     sessionStorage.setItem("sessionToken", "123")
   }
 
   let logout = () => {
     userHasAuthenticated(false);
+    // setSessionToken('');
     sessionStorage.removeItem("isAuthenticated")
     sessionStorage.removeItem("sessionToken")
   }
@@ -178,6 +195,11 @@ function App() {
           <AuthenticatedRoute
             path="/admin"
             component={AdminPage}
+            appProps={{ isAuthenticated }}
+          />
+          <AuthenticatedRoute
+            path="/settings"
+            component={SettingsPage}
             appProps={{ isAuthenticated }}
           />
           <Route path="/explore">

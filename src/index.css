@@ -20,11 +20,15 @@ body {
   flex-direction: row;
   justify-content: space-between;
   align-content: center;
+  height: 60vh;
 }
 
 .main img {
   height: auto;
   width: auto;
+  max-height: 325px;
+  max-width: 400px;
+  align-self: center;
 }
 
 .main .description {
@@ -46,6 +50,8 @@ a:visited {
   padding: 1rem;
   background: transparent;
   color: white;
+  max-width: 1280px;
+  margin: auto;
 }
 
 #home-button {
@@ -98,6 +104,39 @@ a {
 /** PERSONALPAGE **/
 .autocomplete-container {
   color: black;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+}
+
+#formList {
+  width: 50%;
+  margin: 0 auto;
+  background-color: white;
+  color: black;
+  padding: 2em;
+}
+
+#formList textarea {
+  width: calc(100% - 2em);
+  min-height: 5em;
+  margin-bottom: 1em;
+  font-family: 'Roboto';
+  font-size: 16px;
+  padding: 1em;
+}
+
+#mylists-container {
+  display: flex;
+}
+
+.list-form-controls {
+  display: flex;
+  justify-content: space-around;
 }
 
 /** LOGINPAGE **/
@@ -169,6 +208,31 @@ a {
   margin: auto;
 }
 
+/** SETTINGS PAGE **/
+#settings-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  /* background-color: white; */
+  padding: 1em;
+}
+
+#settings-form {
+  background-color: white;
+  color: black;
+  width: 50%;
+  padding: 1em;
+}
+
+#settings-form h3 {
+  display: flex;
+  align-items: center;
+}
+
+#settings-form h3 svg {
+  margin-right: 0.5em;
+}
+
 /** Others **/
 #waiting-cat {
   margin: auto;
@@ -178,6 +242,19 @@ a {
   background-color: white;
   padding: 2em 0;
 }
+
+.modal-content {
+  width: 50%;
+  margin: 0 auto;
+  background-color: white;
+  color: black;
+  padding: 2em;
+}
+
+.modal-content p {
+  color: grey
+}
+
 
 /** MEDIA QUERY **/
 
