@@ -106,7 +106,7 @@ function ListForm({ data, isOpen, onClose, onDelete, onSave }) {
             onDelete(formElements);
         }
     }
-
+    console.log(formElements.restaurants)
     return (
         <Modal
             open={isOpen}
@@ -161,6 +161,9 @@ function ListForm({ data, isOpen, onClose, onDelete, onSave }) {
                             {
                                 data !== undefined ?
                                     formElements.restaurants?.split(';').map(location => {
+                                        if (location === '') {
+                                            return null
+                                        }
                                         return (
                                             Location(location, () => { handleDeleteLocation(location) })
                                         )
@@ -187,7 +190,7 @@ function ListForm({ data, isOpen, onClose, onDelete, onSave }) {
                     </div>
                     <FormControlLabel
                         control={<Checkbox checked={formElements.is_private} onChange={handlePrivacyCheck} name="is_private" />}
-                        label="Public can view"
+                        label="Keep Private"
                     />
                     <div className="list-form-controls">
                         <Button

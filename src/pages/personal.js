@@ -7,30 +7,6 @@ import axios from 'axios'
 import { ENDPOINT } from '../constants/api'
 import { WaitingCat } from '../components/Loading'
 
-// const defaultLists = [
-//     {
-//         name: "Richmond Japanese Hidden Gems",
-//         description: "The best Japanese restaurants to try",
-//         restaurants: ['Sushi Aria', 'Sushi Lovers'],
-//         tags: ['richmond', 'japanese'],
-//         is_private: false,
-//     },
-//     {
-//         name: "Vancouver Sushi Restaurants",
-//         description: "Vancouver's best sushi",
-//         restaurants: ['Minami', 'Sushi California'],
-//         tags: ['vancouver', 'japanese'],
-//         is_private: false,
-//     },
-//     {
-//         name: "Restaurants to avoid",
-//         description: "Don't bother trying these places",
-//         restaurants: ['Restaurant 1', 'Restaurant 2'],
-//         tags: ['richmond', 'vancouver', 'burnaby'],
-//         is_private: false,
-//     }
-// ]
-
 class PersonalPage extends React.Component {
     constructor(props) {
         super(props);
@@ -74,7 +50,6 @@ class PersonalPage extends React.Component {
             let apiKey = sessionStorage.getItem('apiKey')
             axios.delete(ENDPOINT + `/lists/id=${selectedLid}&apiKey=${apiKey}`)
             .then(res => {
-                console.log(res)
                 this.getLists()
             }).catch(err => {
                 console.log(err)

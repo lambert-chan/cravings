@@ -21,6 +21,7 @@ function LoginPage({ callBack }) {
     const [hasAccount, setHasAccount] = useState(true);
     const [formData, updateFormData] = useState(initialData);
     const [alertStatus, setAlertStatus] = useState(false);
+    const [errorStatus, setErrorStatus] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -46,7 +47,8 @@ function LoginPage({ callBack }) {
                     callBack(data)
                 }
             }).catch(err => {
-                console.error(err)
+                setIsLoggingIn(false)
+                setErrorStatus(true)
             })
     }
 
@@ -82,6 +84,10 @@ function LoginPage({ callBack }) {
 
     const handleAlertClose = () => {
         setAlertStatus(false)
+    }
+
+    const handleErrorClose = () => {
+        setErrorStatus(false)
     }
 
 
@@ -193,6 +199,11 @@ function LoginPage({ callBack }) {
             <Snackbar open={alertStatus} autoHideDuration={6000} onClose={handleAlertClose}>
                 <Alert onClose={handleAlertClose} severity="success">
                     Registration successful, you may now login.
+                </Alert>
+            </Snackbar>
+            <Snackbar open={errorStatus} autoHideDuration={6000} onClose={handleErrorClose}>
+                <Alert onClose={handleErrorClose} severity="error">
+                    There's an error with signing in
                 </Alert>
             </Snackbar>
         </Container>

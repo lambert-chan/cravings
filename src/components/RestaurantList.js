@@ -30,10 +30,15 @@ export default class RestaurantList extends React.Component {
                     <>
                         <CardContent>
                             <List>
-                                {data?.restaurants?.split(';').map(item =>
-                                    <ListItem key={item}>
-                                        <ListItemText>{item}</ListItemText>
-                                    </ListItem>)}
+                                {data?.restaurants?.split(';').map(item => {
+                                    if (item === '') {
+                                        return null
+                                    }
+                                    return (
+                                        <ListItem key={item}>
+                                            <ListItemText>{item}</ListItemText>
+                                        </ListItem>)
+                                })}
                             </List>
                         </CardContent>
                         <div style={{ display: 'flex' }}>
