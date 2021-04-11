@@ -132,6 +132,7 @@ a {
 
 #mylists-container {
   display: flex;
+  flex-flow: wrap;
 }
 
 .list-form-controls {
@@ -236,6 +237,7 @@ a {
 /** Others **/
 #waiting-cat {
   margin: auto;
+  padding: 1em;
 }
 
 #swaggerContainer {
@@ -273,5 +275,19 @@ a {
 
   #cravings-menu {
     display: none;
+  }
+
+  .home-image {
+    width: 80vw !important;
+  }
+
+  .list-card {
+    min-width: 225px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #settings-form {
+    width: 80%;
   }
 }

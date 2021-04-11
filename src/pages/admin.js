@@ -9,7 +9,8 @@ function AdminPage() {
     // const [q, setQ] = useState("");
 
     useEffect(() => {
-        axios.get(`${ENDPOINT}/requests`)
+        let apiKey = sessionStorage.getItem('apiKey')
+        axios.get(`${ENDPOINT}/requests?apiKey=${apiKey}`)
             .then(res => {
                 setData(res.data)
             })

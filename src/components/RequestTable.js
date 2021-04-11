@@ -14,7 +14,6 @@ function createData(method, endpoint, requests) {
 }
 
 function RequestTable({ data }) {
-    console.log(data);
     let rows = data.map(request => createData(request?.method, request?.endpoint, request?.requests))
     let keys = Object.keys(data[0]);
     return (

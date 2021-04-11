@@ -16,7 +16,7 @@ function ListForm({ data, isOpen, onClose, onDelete, onSave }) {
     const [formElements, setFormElements] = useState(data ? data : defaultList);
     // eslint-disable-next-line no-unused-vars
     const [location, setLocation] = useState('');
-
+    let isNew = data === undefined
     let tags = tagsList
 
     const handleClose = () => {
@@ -51,15 +51,19 @@ function ListForm({ data, isOpen, onClose, onDelete, onSave }) {
     const handleSelection = ({ label, value }) => {
         setFormElements({
             ...formElements,
-            restaurants: [...formElements.restaurants, value.description]
+            restaurants: formElements.restaurants + ';' + value.description
         })
     }
 
     const handleDeleteLocation = name => {
-        let newList = formElements.restaurants.filter(l => l !== name)
+        let newList = formElements.restaurants.split(';').filter(l => l !== name)
+        let newListString = '';
+        newList.forEach(location => {
+            newListString += location + ';'
+        })
         setFormElements({
             ...formElements,
-            restaurants: newList
+            restaurants: newListString
         })
     }
 
@@ -85,7 +89,12 @@ function ListForm({ data, isOpen, onClose, onDelete, onSave }) {
             return
         } else {
             if (onSave) {
-                onSave(formElements);
+                // convert restaurants into array
+                let formData = {
+                    ...formElements,
+                    restaurants: formElements.restaurants.split(';')
+                }
+                onSave(formData, isNew);
             }
         }
 
@@ -94,7 +103,7 @@ function ListForm({ data, isOpen, onClose, onDelete, onSave }) {
     const handleDeleteList = e => {
         e.preventDefault();
         if (onDelete) {
-            onDelete();
+            onDelete(formElements);
         }
     }
 
@@ -150,7 +159,14 @@ function ListForm({ data, isOpen, onClose, onDelete, onSave }) {
                     <div id="locations-container">
                         <ul>
                             {
-                                formElements.restaurants.map(location => Location(location, () => { handleDeleteLocation(location) }))
+                                data !== undefined ?
+                                    formElements.restaurants?.split(';').map(location => {
+                                        return (
+                                            Location(location, () => { handleDeleteLocation(location) })
+                                        )
+                                    })
+                                :
+                                    null
                             }
                         </ul>
                     </div>

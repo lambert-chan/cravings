@@ -3,39 +3,44 @@ import { Button, Card, CardHeader, IconButton, Container } from '@material-ui/co
 import EditIcon from '@material-ui/icons/Edit'
 import ListForm from '../components/ListForm'
 import { DeleteModal } from '../components/Modals'
+import axios from 'axios'
+import { ENDPOINT } from '../constants/api'
+import { WaitingCat } from '../components/Loading'
 
-const defaultLists = [
-    {
-        name: "Richmond Japanese Hidden Gems",
-        description: "The best Japanese restaurants to try",
-        restaurants: ['Sushi Aria', 'Sushi Lovers'],
-        tags: ['richmond', 'japanese'],
-        is_private: false,
-    },
-    {
-        name: "Vancouver Sushi Restaurants",
-        description: "Vancouver's best sushi",
-        restaurants: ['Minami', 'Sushi California'],
-        tags: ['vancouver', 'japanese'],
-        is_private: false,
-    },
-    {
-        name: "Restaurants to avoid",
-        description: "Don't bother trying these places",
-        restaurants: ['Restaurant 1', 'Restaurant 2'],
-        tags: ['richmond', 'vancouver', 'burnaby'],
-        is_private: false,
-    }
-]
+// const defaultLists = [
+//     {
+//         name: "Richmond Japanese Hidden Gems",
+//         description: "The best Japanese restaurants to try",
+//         restaurants: ['Sushi Aria', 'Sushi Lovers'],
+//         tags: ['richmond', 'japanese'],
+//         is_private: false,
+//     },
+//     {
+//         name: "Vancouver Sushi Restaurants",
+//         description: "Vancouver's best sushi",
+//         restaurants: ['Minami', 'Sushi California'],
+//         tags: ['vancouver', 'japanese'],
+//         is_private: false,
+//     },
+//     {
+//         name: "Restaurants to avoid",
+//         description: "Don't bother trying these places",
+//         restaurants: ['Restaurant 1', 'Restaurant 2'],
+//         tags: ['richmond', 'vancouver', 'burnaby'],
+//         is_private: false,
+//     }
+// ]
 
 class PersonalPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            lists: defaultLists,
+            lists: [],
             showListForm: false,
             selectedFormData: {},
-            showDeleteModal: false
+            showDeleteModal: false,
+            showLoading: false,
+            selectedLid: null
         }
     }
 
@@ -52,10 +57,10 @@ class PersonalPage extends React.Component {
         })
     }
 
-    deleteWarning = () => {
-        console.log('show delete warning')
+    deleteWarning = data => {
         this.setState({
-            showDeleteModal: true
+            showDeleteModal: true,
+            selectedLid: data?.id
         })
     }
 
@@ -65,6 +70,15 @@ class PersonalPage extends React.Component {
             this.setState({
                 showListForm: false
             })
+            const { selectedLid} = this.state
+            let apiKey = sessionStorage.getItem('apiKey')
+            axios.delete(ENDPOINT + `/lists/id=${selectedLid}&apiKey=${apiKey}`)
+            .then(res => {
+                console.log(res)
+                this.getLists()
+            }).catch(err => {
+                console.log(err)
+            })
         } else {
             // do false
         }
@@ -73,13 +87,74 @@ class PersonalPage extends React.Component {
         })
     }
 
-    handleSave = resp => {
-        console.log(resp);
-        // Post Resp
+    handleSave = (resp, isNew) => {
+        let apikey = sessionStorage.getItem('apiKey')
+        let data = {
+            ...resp,
+            restaraunts: resp.restaurants
+        }
+        let dataString = `apiKey=${apikey}&list=${JSON.stringify(data)}`
+        this.setState({
+            showListForm: false,
+            showLoading: true
+        })
+        if (isNew) {
+            axios.post(ENDPOINT + '/lists', dataString)
+                .then(res => {
+                    console.log(res)
+                    // get all lists again
+                    this.getLists()
+                    this.setState({
+                        showLoading: false
+                    })
+                }).catch(err => {
+                    this.setState({
+                        showLoading: false
+                    })
+                })
+        } else {
+            axios.put(ENDPOINT + '/lists', dataString)
+                .then(res => {
+                    console.log(res)
+                    // get all lists again
+                    this.getLists()
+                    this.setState({
+                        showLoading: false
+                    })
+                }).catch(err => {
+                    this.setState({
+                        showLoading: false
+                    })
+                })
+        }
+    }
+
+    getLists = () => {
+        let apikey = sessionStorage.getItem('apiKey')
+        this.setState({
+            showLoading: true
+        })
+        axios.get(ENDPOINT + `/lists/getByUser?apiKey=${apikey}`)
+            .then(res => {
+                let lists = res?.data?.response
+                if (lists[0].id == null) {
+                    this.setState({
+                        showLoading: false
+                    })
+                    return
+                }
+                this.setState({
+                    lists: res.data.response ?? []
+                })
+            })
+    }
+
+    componentDidMount() {
+        this.getLists()
     }
 
     render() {
-        const { lists, selectedFormData, showDeleteModal, showListForm } = this.state;
+        const { lists, selectedFormData, showDeleteModal, showListForm, showLoading } = this.state;
         return (
             <Container component="main" className="main">
                 <Button
@@ -103,14 +178,15 @@ class PersonalPage extends React.Component {
                         lists.length !== 0 ?
                             lists.map(list => List(list?.name, list?.description, () => { this.openListForm(list) }))
                             :
-                            <span>You have not created any lists</span>
+                            showLoading ? <WaitingCat /> :
+                                <p>You have not created any lists yet.</p>
                     }
                 </div>
                 {showDeleteModal &&
                     <DeleteModal
                         isOpen={showDeleteModal}
                         onClose={this.closeDeleteWarning}
-                        content="This will delete the list permanently"
+                        content="This will permanently delete the list"
                     />
                 }
             </Container>

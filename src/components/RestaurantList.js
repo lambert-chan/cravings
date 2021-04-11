@@ -9,7 +9,8 @@ export default class RestaurantList extends React.Component {
 
     checkFilter() {
         const { data, filter } = this.props;
-        let card_cats = data?.tags
+        let tagString = data?.tags
+        let card_cats = tagString?.split(',')
         for (let i = 0; i < card_cats.length; i++) {
             let name = card_cats[i]
             if (filter.includes(name)) {
@@ -29,14 +30,14 @@ export default class RestaurantList extends React.Component {
                     <>
                         <CardContent>
                             <List>
-                                {data?.restaurants.map(item =>
+                                {data?.restaurants?.split(';').map(item =>
                                     <ListItem key={item}>
                                         <ListItemText>{item}</ListItemText>
                                     </ListItem>)}
                             </List>
                         </CardContent>
                         <div style={{ display: 'flex' }}>
-                            {data?.tags.map(tag =>
+                            {data?.tags.split(',').map(tag =>
                                 <Chip key={tag} label={tag} />
                             )}
                         </div>

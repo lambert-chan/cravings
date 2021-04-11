@@ -4,21 +4,25 @@ import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import ListAlt from '@material-ui/icons/ListAlt'
 import Container from '@material-ui/core/Container';
-import moment from 'moment'
-// import axios from 'axios'
-import {ENDPOINT} from '../constants/api'
+import axios from 'axios'
+import { ENDPOINT } from '../constants/api'
+import { Snackbar, CircularProgress } from '@material-ui/core';
+import { Alert } from '../components/Modals'
+import { useHistory } from 'react-router-dom'
 
 function LoginPage({ callBack }) {
     const initialData = {
         name: '',
         email: '',
         password: '',
-        registerEmail: '',
-        registerPassword: '',
-        isAdmin: false,
     }
+    const history = useHistory()
+
     const [hasAccount, setHasAccount] = useState(true);
     const [formData, updateFormData] = useState(initialData);
+    const [alertStatus, setAlertStatus] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
     const handleChange = e => {
         updateFormData({
@@ -30,56 +34,54 @@ function LoginPage({ callBack }) {
     const handleSubmit = e => {
         e.preventDefault();
 
-        var submission_time = moment(e?.timestamp);
-        console.log(submission_time);
-        var formBody = "email=" + formData.email + "&password="
-            + formData.password;
-        fetch(ENDPOINT + '/users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: formBody
-        }).then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            console.log(json.response);
-            if (json.response === "User not found!" || json.response === "Passwords do not match!") {
-                window.alert("Login Failed! Either email or password are incorrect!")
-            }
-            else {
+        setIsLoggingIn(true)
+        let dataString = `email=${formData?.email}&password=${formData?.password}`
+        axios.post(ENDPOINT + '/users/login', dataString)
+            .then(resp => {
+                let data = resp.data;
+                updateFormData(initialData)
+                setIsLoggingIn(false)
+                history.push('/')
                 if (callBack) {
-                    callBack();
+                    callBack(data)
                 }
-            }
-
-        })
+            }).catch(err => {
+                console.error(err)
+            })
     }
 
-    const handleRegister = e => {
+    function handleRegister(e) {
         e.preventDefault();
-        let formDataUrl = "name=" + formData.name + "&email=" + formData.registerEmail + "&password="
-            + formData.registerPassword;
-        fetch(ENDPOINT + '/users/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: formDataUrl
-        }).then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            console.log(json.response)
-            if (json.response === "Email present") {
-                window.alert("Registration failed email already in use!")
+        setIsRegistering(true)
+        var isFilled = true
+        let keys = Object.keys(formData)
+        for (let i = 0; i < keys.length; i++) {
+            if (formData[keys[i]] === '') {
+                isFilled = false
             }
-            if (json.response === "Registered") {
-                if (callBack) {
-                    callBack();
-                }
-            }
-        })
+        }
+        if (!isFilled) {
+            return
+        }
+        let dataString = `name=${formData?.name}&email=${formData?.email}&password=${formData?.password}`
+        axios.post(ENDPOINT + '/users/register', dataString)
+            .then(res => {
+                setAlertStatus(true);
+                updateFormData(initialData)
+                setHasAccount(true)
+                setIsRegistering(false)
+            }).catch(err => {
+                console.error(err)
+            })
+    }
 
+    const toggleForm = () => {
+        setHasAccount(!hasAccount)
+        updateFormData(initialData)
+    }
+
+    const handleAlertClose = () => {
+        setAlertStatus(false)
     }
 
 
@@ -96,12 +98,11 @@ function LoginPage({ callBack }) {
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="email"
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
-                                autoFocus
                                 onChange={handleChange}
+                                value={formData?.email}
                             />
                             <TextField
                                 variant="outlined"
@@ -111,9 +112,9 @@ function LoginPage({ callBack }) {
                                 name="password"
                                 label="Password"
                                 type="password"
-                                id="password"
                                 autoComplete="current-password"
                                 onChange={handleChange}
+                                value={formData?.password}
                             />
                             <Button
                                 type="submit"
@@ -121,12 +122,13 @@ function LoginPage({ callBack }) {
                                 variant="contained"
                                 className='submit'
                             >
-                                Sign In</Button>
+                                {isLoggingIn ? <CircularProgress /> : 'Sign In'}
+                            </Button>
                             <p>Don't have an account?</p>
                             <Button
                                 type="button"
                                 className='register'
-                                onClick={() => setHasAccount(false)}
+                                onClick={toggleForm}
                             >
                                 Register</Button>
                         </form>
@@ -142,53 +144,57 @@ function LoginPage({ callBack }) {
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="name"
                                 label="Username"
                                 name="name"
-                                autoFocus
                                 onChange={handleChange}
+                                value={formData?.name}
                             />
                             <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="registerEmail"
                                 label="Email Address"
-                                name="registerEmail"
+                                name="email"
                                 autoComplete="email"
                                 onChange={handleChange}
-                                autoFocus
+                                value={formData?.email}
                             />
                             <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
                                 fullWidth
-                                name="registerPassword"
+                                name="password"
                                 label="Password"
                                 type="password"
-                                id="registerPassword"
                                 autoComplete="current-password"
                                 onChange={handleChange}
+                                value={formData?.password}
                             />
                             <Button
                                 type="submit"
                                 fullWidth
                                 className='register'
                             >
-                                Register</Button>
+                                {isRegistering ? <CircularProgress /> : 'Register'}
+                            </Button>
                             <p>Have an account already?</p>
                             <Button
                                 type="button"
                                 variant="contained"
                                 className='submit'
-                                onClick={() => setHasAccount(true)}
+                                onClick={toggleForm}
                             >
                                 Sign In</Button>
                         </form>
                     </>}
             </div>
+            <Snackbar open={alertStatus} autoHideDuration={6000} onClose={handleAlertClose}>
+                <Alert onClose={handleAlertClose} severity="success">
+                    Registration successful, you may now login.
+                </Alert>
+            </Snackbar>
         </Container>
     );
 }

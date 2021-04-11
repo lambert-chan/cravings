@@ -4,15 +4,17 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import { DeleteModal } from '../components/Modals'
 import axios from 'axios';
 import { ENDPOINT } from '../constants/api'
+import { useHistory } from 'react-router-dom'
 
-const data = {
-    name: 'username',
-    email: 'email@email.com'
+const defaultUser = {
+    name: '',
+    email: ''
 }
 
 function SettingsPage() {
     const [isDeleteModalOpen, setDeleteModalStatus] = useState(false)
-
+    const [data, setData] = useState(defaultUser)
+    const history = useHistory();
     const getUserData = () => {
         // get from sessionid
     }
@@ -21,33 +23,58 @@ function SettingsPage() {
         getUserData()
     })
 
-    const handleNameChange = (e, v) => {
-        console.log(v)
+    const handleNameChange = e => {
+        let key = e.target.name;
+        let value = e.target.value;
+        setData({
+            ...data,
+            [key]: value
+        })
     }
 
-    const handleSave = resp => {
-        console.log(resp)
-        // Axios Put
+    const handleSave = e => {
+        e.preventDefault()
+        let api_key = sessionStorage.getItem('apiKey')
+        let dataString = `apKey=${api_key}&name=${data.name}&email=${data.email}`
+        axios.put(ENDPOINT + '/users', dataString)
+            .then(res => {
+                console.log(res)
+            })
     }
 
-    const handleDelete = () => {
-        console.log('delete')
-        // Axios Delete
+    const handleDelete = e => {
         setDeleteModalStatus(true)
     }
 
     const onCloseModal = resp => {
         if (resp) {
-
-        } else {
-
+            let api_key = sessionStorage.getItem('apiKey')
+            let dataString = `/apiKey=${api_key}`
+            axios.delete(ENDPOINT + '/users', {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: {
+                    source: dataString
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                    history.push('/')
+                })
         }
         setDeleteModalStatus(false)
     }
 
+    useEffect(() => {
+        let storageEmail = sessionStorage.getItem('email')
+        let storageName = sessionStorage.getItem('name')
+        setData({ name: storageName, email: storageEmail })
+    }, [])
+
     return (
         <div id="settings-container">
-            <form id='settings-form' className='form' noValidate onSubmit={() => { }}>
+            <form id='settings-form' className='form' noValidate>
                 <h3>
                     <SettingsIcon />
                     Settings
@@ -55,30 +82,25 @@ function SettingsPage() {
                 <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     label="Name"
                     name="name"
-                    defaultValue={data?.name}
-                    type="text"
-                    autoFocus
+                    type="name"
                     onChange={handleNameChange}
+                    value={data.name}
                 />
                 <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     label="Email"
                     name="email"
                     type="email"
-                    defaultValue={data?.email}
-                    autoFocus
                     onChange={handleNameChange}
+                    value={data.email}
                 />
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                     <Button
-                        type="submit"
                         variant="contained"
                         style={{ backgroundColor: '#1183ca', color: 'white' }}
                         onClick={handleSave}

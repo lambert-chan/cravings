@@ -1,4 +1,5 @@
 import { Button, Modal } from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert';
 import ErrorIcon from '@material-ui/icons/Error'
 
 export function DeleteModal({ isOpen, content, onClose }) {
@@ -42,4 +43,8 @@ export function DeleteModal({ isOpen, content, onClose }) {
             </Modal>
         </div>
     )
+}
+
+export function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
 }

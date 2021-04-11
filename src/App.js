@@ -24,7 +24,7 @@ import AuthenticatedRoute from './components/AuthenticatedRoute'
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isAuthenticated, userHasAuthenticated] = useState(false);
-  const [sessionToken, setSessionToken] = useState("123")
+  const [sessionToken, setSessionToken] = useState("")
 
   const adminMenu = [
     {
@@ -60,7 +60,7 @@ function App() {
 
   const hasToken = () => {
     let isAuthenticated = sessionStorage.getItem("isAuthenticated")
-    let storageToken = sessionStorage.getItem("sessionToken")
+    let storageToken = sessionStorage.getItem("apiKey")
     if (isAuthenticated && storageToken === sessionToken) {
       userHasAuthenticated(true)
     } else {
@@ -75,6 +75,32 @@ function App() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  let login = resp => {
+    let api_key = resp.api_key
+    let is_admin = resp.is_admin.data[0] === 1
+    
+    sessionStorage.setItem('is_admin', is_admin)
+    sessionStorage.setItem("isAuthenticated", "true")
+    sessionStorage.setItem("apiKey", api_key)
+    sessionStorage.setItem("email", resp.email)
+    sessionStorage.setItem("name", resp.name)
+
+    userHasAuthenticated(true);
+    setSessionToken(api_key);
+  }
+
+  let logout = () => {
+    userHasAuthenticated(false);
+    setSessionToken('');
+    sessionStorage.removeItem("isAuthenticated")
+    sessionStorage.removeItem("sessionToken")
+    sessionStorage.removeItem('is_admin')
+    sessionStorage.removeItem("isAuthenticated")
+    sessionStorage.removeItem("apiKey")
+    sessionStorage.removeItem("email")
+    sessionStorage.removeItem("name")
+  }
 
   const mobileMenu = () => {
     return (
@@ -144,21 +170,6 @@ function App() {
 
       </ul>
     )
-  }
-
-  let login = () => {
-    console.log('callback login')
-    userHasAuthenticated(true);
-    // setSessionToken('123');
-    sessionStorage.setItem("isAuthenticated", "true")
-    sessionStorage.setItem("sessionToken", "123")
-  }
-
-  let logout = () => {
-    userHasAuthenticated(false);
-    // setSessionToken('');
-    sessionStorage.removeItem("isAuthenticated")
-    sessionStorage.removeItem("sessionToken")
   }
 
   return (
